@@ -19,20 +19,20 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Install Android Platform 34 & Build-Tools
+      - name: Configure Android SDK Environment
         run: |
-          sdkmanager "platforms;android-34" "build-tools;34.0.0"
+          echo "ANDROID_SDK_ROOT=$HOME/android-sdk" >> $GITHUB_ENV
+          yes | sdkmanager --sdk_root=$HOME/android-sdk --licenses || true
+          sdkmanager --sdk_root=$HOME/android-sdk "platforms;android-34" "build-tools;34.0.0"
 
       - name: Make build script executable and compile
         run: |
           cd halo
           chmod +x build.sh
-          ./build.sh
+          bash build.sh
 
       - name: Upload Compiled APK
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: HaloHome-APK
