@@ -8,6 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -21,17 +22,17 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Install Android Platform 34 and Build Tools 34
+      - name: Install Android Platform 34 & Build-Tools
         run: |
           sdkmanager "platforms;android-34" "build-tools;34.0.0"
 
-      - name: Build TVOS with build.sh
+      - name: Make build script executable and compile
         run: |
           cd halo
           chmod +x build.sh
           ./build.sh
 
-      - name: Upload APK Artifact
+      - name: Upload Compiled APK
         uses: actions/upload-artifact@v4
         with:
           name: HaloHome-APK
